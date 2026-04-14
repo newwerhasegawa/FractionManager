@@ -10,20 +10,19 @@ encoding.default = 'CP1251'
 local u8 = encoding.UTF8
 math.randomseed(os.time())
 
--- ================= [ ССЫЛКИ ] =================
--- ?? ВСТАВЬ СЮДА СВОЮ НОВУЮ ССЫЛКУ ОТ GOOGLE APPS SCRIPT:
-local GAS_URL = "https://script.google.com/macros/s/AKfycbyYTiChuuyR-SaBXku1_rzrybLN20aKtZyWpqjTmHavoKC6tx1WRqAQbiq_FwQLmd4gnw/exec"
+-- ================= [ РЎРЎР«Р›РљР ] =================
+local GAS_URL = "https://script.google.com/macros/s/AKfycbzlhofBfvRQqX-rrUdd6F2Mn6lOzHhcRbDKylPCSlg-_q96kJ2nEkL27mcoRJ85TNaOkA/exec"
 
 local fm_dir = getWorkingDirectory() .. "\\config\\FractionManager\\"
 local localLecturesJson = fm_dir .. "lectures.json"
 local localLecturesVer = fm_dir .. "lectures_version.txt"
-local LECTURES_JSON_URL = "https://raw.githubusercontent.com/newwerhasegawa/FractionManager/main/lectures.json"
-local LECTURES_VER_URL = "https://raw.githubusercontent.com/newwerhasegawa/FractionManager/main/lectures_version.txt"
+local LECTURES_JSON_URL = "https://raw.githubusercontent.com/newwerhasegawa/FractionManager/refs/heads/main/lectures.json"
+local LECTURES_VER_URL = "https://raw.githubusercontent.com/newwerhasegawa/FractionManager/refs/heads/main/lectures_version.txt"
 
 local SCRIPT_VER_URL = "https://raw.githubusercontent.com/newwerhasegawa/FractionManager/refs/heads/main/version.txt"
 local SCRIPT_URL = "https://raw.githubusercontent.com/newwerhasegawa/FractionManager/refs/heads/main/FractionManager.lua"
 
--- ================= [ ПЕРЕМЕННЫЕ ] =================
+-- ================= [ РџР•Р Р•РњР•РќРќР«Р• ] =================
 local cadetsOnline = {}
 local tempCadets = {}
 local factionOnline = {} 
@@ -50,13 +49,13 @@ local wasPaused = false
 
 local myCachedNick = nil
 
--- Ролевая система
+-- Р РѕР»РµРІР°СЏ СЃРёСЃС‚РµРјР°
 local myRole = "User"
 local myPrio = 0
 local isMaster = false
 local forcedMasterSync = false
 
--- ================= [ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ] =================
+-- ================= [ Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР ] =================
 local function safe_u8(str)
     return u8(tostring(str or ""))
 end
@@ -84,7 +83,7 @@ local function isMarked(val)
     local num = tonumber(val)
     if num then return num >= 1 end
     local str = tostring(val):lower()
-    return str == "true" or str == "1" or str == "да"
+    return str == "true" or str == "1" or str == "РґР°"
 end
 
 local function GetNick()
@@ -97,7 +96,7 @@ local function GetNick()
             return myCachedNick 
         end
     end
-    return "Инструктор"
+    return "РРЅСЃС‚СЂСѓРєС‚РѕСЂ"
 end
 
 local function smartWait(ms)
@@ -114,11 +113,11 @@ end
 
 local function showWelcomeMessage()
     local scr = thisScript()
-    sampAddChatMessage("{0633E5}" .. scr.name .. " {FFFFFF}v.{C8271E}" .. scr.version .. "{FFFFFF} authors {3645E2}" .. table.concat(scr.authors, ", ") .. "{FFFFFF} был успешно загружен!", 0x0633E5)
-    sampAddChatMessage("{FFFFFF}Для активации/деактивации скрипта нажмите клавишу '{C8271E}F5{FFFFFF}'.", 0x0633E5)
-    sampAddChatMessage("{FFFFFF}Главное меню скрипта - {C8271E}/fm{FFFFFF}, поставить на паузу лекцию клавиша '{C8271E}I{FFFFFF}'.", 0x0633E5)
-    sampAddChatMessage("{FFFFFF}Обновить информацию вручную - {C8271E}/updc{FFFFFF}.", 0x0633E5)
-    sampAddChatMessage("{FFFFFF}Принудительно обновить таблицу /members - {C8271E}/updmembers{FFFFFF}.", 0x0633E5)
+    sampAddChatMessage("{0633E5}" .. scr.name .. " {FFFFFF}v.{C8271E}" .. scr.version .. "{FFFFFF} authors {3645E2}" .. table.concat(scr.authors, ", ") .. "{FFFFFF} Р±С‹Р» СѓСЃРїРµС€РЅРѕ Р·Р°РіСЂСѓР¶РµРЅ!", 0x0633E5)
+    sampAddChatMessage("{FFFFFF}Р”Р»СЏ Р°РєС‚РёРІР°С†РёРё/РґРµР°РєС‚РёРІР°С†РёРё СЃРєСЂРёРїС‚Р° РЅР°Р¶РјРёС‚Рµ РєР»Р°РІРёС€Сѓ '{C8271E}F5{FFFFFF}'.", 0x0633E5)
+    sampAddChatMessage("{FFFFFF}Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ СЃРєСЂРёРїС‚Р° - {C8271E}/fm{FFFFFF}, РїРѕСЃС‚Р°РІРёС‚СЊ РЅР° РїР°СѓР·Сѓ Р»РµРєС†РёСЋ РєР»Р°РІРёС€Р° '{C8271E}I{FFFFFF}'.", 0x0633E5)
+    sampAddChatMessage("{FFFFFF}РћР±РЅРѕРІРёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РІСЂСѓС‡РЅСѓСЋ - {C8271E}/updc{FFFFFF}.", 0x0633E5)
+    sampAddChatMessage("{FFFFFF}РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РѕР±РЅРѕРІРёС‚СЊ С‚Р°Р±Р»РёС†Сѓ /members - {C8271E}/updmembers{FFFFFF}.", 0x0633E5)
 end
 
 local dlQueue = {}
@@ -126,15 +125,15 @@ local function queueHttpRequest(url, callback)
     table.insert(dlQueue, {url = url, callback = callback})
 end
 
--- ================= [ МЕНЮ ] =================
+-- ================= [ РњР•РќР® ] =================
 local function openFmMenu()
     if myPrio < 2 then
-        sampAddChatMessage("{0633E5}[FM] {FF0000}У вас нет доступа к меню управления кадетами.", -1)
+        sampAddChatMessage("{0633E5}[FM] {FF0000}РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° Рє РјРµРЅСЋ СѓРїСЂР°РІР»РµРЅРёСЏ РєР°РґРµС‚Р°РјРё.", -1)
         return
     end
 
-    local toggleText = showHUD and "{FF0000}Выключить HUD" or "{00FF00}Включить HUD"
-    local s = toggleText .. "\n{0633E5}Лекции\n{0633E5}Обновить список кадетов\n{FFFFFF}" 
+    local toggleText = showHUD and "{FF0000}Р’С‹РєР»СЋС‡РёС‚СЊ HUD" or "{00FF00}Р’РєР»СЋС‡РёС‚СЊ HUD"
+    local s = toggleText .. "\n{0633E5}Р›РµРєС†РёРё\n{0633E5}РћР±РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє РєР°РґРµС‚РѕРІ\n{FFFFFF}" 
     
     if #cadetsOnline > 0 then
         for i, v in ipairs(cadetsOnline) do 
@@ -143,27 +142,27 @@ local function openFmMenu()
             end
         end
     else
-        s = s .. "{A9A9A9}Кадетов в сети нет\n"
+        s = s .. "{A9A9A9}РљР°РґРµС‚РѕРІ РІ СЃРµС‚Рё РЅРµС‚\n"
     end
     
-    sampShowDialog(9910, "{0633E5}Управление кадетами", s, "Выбрать", "Назад", 2)
+    sampShowDialog(9910, "{0633E5}РЈРїСЂР°РІР»РµРЅРёРµ РєР°РґРµС‚Р°РјРё", s, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2)
 end
 
 local function showMyStat()
     if not u8 then 
-        sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Библиотека encoding не загружена!", -1)
+        sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: Р‘РёР±Р»РёРѕС‚РµРєР° encoding РЅРµ Р·Р°РіСЂСѓР¶РµРЅР°!", -1)
         return 
     end
 
-    sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запрос личной статистики...", -1)
+    sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСЂРѕСЃ Р»РёС‡РЅРѕР№ СЃС‚Р°С‚РёСЃС‚РёРєРё...", -1)
     
     local myNick = GetNick()
     queueHttpRequest(GAS_URL .. "?action=mystat&name=" .. urlencode(safe_u8(myNick)), function(content)
         if content and content ~= "" then
             local res, data = pcall(decodeJson, content)
             if res and type(data) == "table" and data.sheet and data.headers and data.row then
-                local sheetName = u8:decode(tostring(data.sheet)) or "Неизвестно"
-                local text = string.format("{00FF00}Подразделение:{FFFFFF} %s\n\n", sheetName)
+                local sheetName = u8:decode(tostring(data.sheet)) or "РќРµРёР·РІРµСЃС‚РЅРѕ"
+                local text = ""
                 
                 local h = data.headers
                 local r = data.row
@@ -175,22 +174,27 @@ local function showMyStat()
                         
                         if headerName ~= "" and rowValue ~= "" and rowValue ~= "0" and rowValue ~= "false" then
                             text = text .. "{A020F0}" .. headerName .. ":{FFFFFF} " .. rowValue .. "\n"
+                            
+                            if headerName == "Р—РІР°РЅРёРµ" then
+                                text = text .. "{A020F0}РћС‚РґРµР»:{FFFFFF} " .. sheetName .. "\n"
+                            elseif headerName == "РќРёРє" and sheetName == "Cadets" then
+                                text = text .. "{A020F0}РћС‚РґРµР»:{FFFFFF} " .. sheetName .. "\n"
+                            end
                         end
                     end
                 end
                 
-                local titleNick = r[1] and u8:decode(tostring(r[1])) or myNick
-                sampShowDialog(9920, "{0633E5}Моя статистика: " .. titleNick, text, "Закрыть", "", 0)
+                sampShowDialog(9920, "{0633E5}РЎС‚Р°С‚РёСЃС‚РёРєР°", text, "Р—Р°РєСЂС‹С‚СЊ", "", 0)
             else
-                sampAddChatMessage("{0633E5}[FM] {FF0000}Ваши данные не найдены или таблица вернула ошибку.", -1)
+                sampAddChatMessage("{0633E5}[FM] {FF0000}Р’Р°С€Рё РґР°РЅРЅС‹Рµ РЅРµ РЅР°Р№РґРµРЅС‹ РёР»Рё С‚Р°Р±Р»РёС†Р° РІРµСЂРЅСѓР»Р° РѕС€РёР±РєСѓ.", -1)
             end
         else
-            sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Пустой ответ от сервера.", -1)
+            sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РџСѓСЃС‚РѕР№ РѕС‚РІРµС‚ РѕС‚ СЃРµСЂРІРµСЂР°.", -1)
         end
     end)
 end
 
--- ================= [ АВТООБНОВЛЕНИЕ СКРИПТА ] =================
+-- ================= [ РђР’РўРћРћР‘РќРћР’Р›Р•РќРР• РЎРљР РРџРўРђ ] =================
 local function checkScriptUpdate()
     if updateTriggered then return end
     queueHttpRequest(SCRIPT_VER_URL .. "?t=" .. os.time(), function(remoteVer)
@@ -200,7 +204,7 @@ local function checkScriptUpdate()
         
         if cleanRemoteVer and cleanRemoteVer ~= currentVer then
             updateTriggered = true
-            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Найдена версия скрипта {00FF00}v." .. cleanRemoteVer .. "{FFFFFF}. Нажмите {00FF00}Y{FFFFFF} для обновления или {FF0000}N{FFFFFF} для отказа (15 сек).", -1)
+            sampAddChatMessage("{0633E5}[FM] {FFFFFF}РќР°Р№РґРµРЅР° РІРµСЂСЃРёСЏ СЃРєСЂРёРїС‚Р° {00FF00}v." .. cleanRemoteVer .. "{FFFFFF}. РќР°Р¶РјРёС‚Рµ {00FF00}Y{FFFFFF} РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РёР»Рё {FF0000}N{FFFFFF} РґР»СЏ РѕС‚РєР°Р·Р° (15 СЃРµРє).", -1)
             
             lua_thread.create(function()
                 local timer = os.clock()
@@ -208,7 +212,7 @@ local function checkScriptUpdate()
                 while os.clock() - timer < 15.0 do
                     wait(0)
                     if wasKeyPressed(vkeys.VK_Y) and not sampIsChatInputActive() and not sampIsDialogActive() then
-                        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Начинаю загрузку...", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FFFFFF}РќР°С‡РёРЅР°СЋ Р·Р°РіСЂСѓР·РєСѓ...", -1)
                         answered = true
                         queueHttpRequest(SCRIPT_URL .. "?t=" .. os.time(), function(content)
                             if content and content:find("script_name") then
@@ -216,30 +220,30 @@ local function checkScriptUpdate()
                                 if f then
                                     f:write(u8:decode(content))
                                     f:close()
-                                    sampAddChatMessage("{0633E5}[FM] {00FF00}Файл обновлен. Перезагрузка через 1 сек...", -1)
+                                    sampAddChatMessage("{0633E5}[FM] {00FF00}Р¤Р°Р№Р» РѕР±РЅРѕРІР»РµРЅ. РџРµСЂРµР·Р°РіСЂСѓР·РєР° С‡РµСЂРµР· 1 СЃРµРє...", -1)
                                     lua_thread.create(function()
                                         wait(1000) 
                                         thisScript():reload()
                                     end)
                                 else
-                                    sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Файл занят другой программой!", -1)
+                                    sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: Р¤Р°Р№Р» Р·Р°РЅСЏС‚ РґСЂСѓРіРѕР№ РїСЂРѕРіСЂР°РјРјРѕР№!", -1)
                                     updateTriggered = false
                                 end
                             else
-                                sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Получен пустой файл обновления.", -1)
+                                sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РџРѕР»СѓС‡РµРЅ РїСѓСЃС‚РѕР№ С„Р°Р№Р» РѕР±РЅРѕРІР»РµРЅРёСЏ.", -1)
                                 updateTriggered = false
                             end
                         end)
                         break
                     elseif wasKeyPressed(vkeys.VK_N) and not sampIsChatInputActive() and not sampIsDialogActive() then
-                        sampAddChatMessage("{0633E5}[FM] {FF0000}Обновление скрипта отменено пользователем.", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FF0000}РћР±РЅРѕРІР»РµРЅРёРµ СЃРєСЂРёРїС‚Р° РѕС‚РјРµРЅРµРЅРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј.", -1)
                         answered = true
                         updateTriggered = false
                         break
                     end
                 end
                 if not answered then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Время вышло. Обновление скрипта отменено автоматически.", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}Р’СЂРµРјСЏ РІС‹С€Р»Рѕ. РћР±РЅРѕРІР»РµРЅРёРµ СЃРєСЂРёРїС‚Р° РѕС‚РјРµРЅРµРЅРѕ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.", -1)
                     updateTriggered = false
                 end
             end)
@@ -247,7 +251,7 @@ local function checkScriptUpdate()
     end)
 end
 
--- ================= [ ФУНКЦИИ ЛЕКЦИЙ ] =================
+-- ================= [ Р¤РЈРќРљР¦РР Р›Р•РљР¦РР™ ] =================
 local function loadLecturesLocally()
     if not doesFileExist(localLecturesJson) then return false end
     local f = io.open(localLecturesJson, "r")
@@ -292,7 +296,7 @@ local function updateLecturesFromGitHub()
         if not content then return end
         local gitVer = tonumber(content:match("%d+")) or 0
         if gitVer > localVer then
-            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Найдено обновление лекций. Нажмите {00FF00}Y{FFFFFF} для обновления или {FF0000}N{FFFFFF} (15 сек).", -1)
+            sampAddChatMessage("{0633E5}[FM] {FFFFFF}РќР°Р№РґРµРЅРѕ РѕР±РЅРѕРІР»РµРЅРёРµ Р»РµРєС†РёР№. РќР°Р¶РјРёС‚Рµ {00FF00}Y{FFFFFF} РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РёР»Рё {FF0000}N{FFFFFF} (15 СЃРµРє).", -1)
             
             lua_thread.create(function()
                 local timer = os.clock()
@@ -300,7 +304,7 @@ local function updateLecturesFromGitHub()
                 while os.clock() - timer < 15.0 do
                     wait(0)
                     if wasKeyPressed(vkeys.VK_Y) and not sampIsChatInputActive() and not sampIsDialogActive() then
-                        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Загрузка обновления лекций...", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РіСЂСѓР·РєР° РѕР±РЅРѕРІР»РµРЅРёСЏ Р»РµРєС†РёР№...", -1)
                         answered = true
                         queueHttpRequest(LECTURES_JSON_URL .. "?t=" .. os.time(), function(jsonContent)
                             if not jsonContent then return end
@@ -309,18 +313,18 @@ local function updateLecturesFromGitHub()
                             local fVer = io.open(localLecturesVer, "w")
                             if fVer then fVer:write(tostring(gitVer)); fVer:close() end
                             loadLecturesLocally()
-                            sampAddChatMessage("{0633E5}[FM] {00FF00}Лекции успешно обновлены!", -1)
+                            sampAddChatMessage("{0633E5}[FM] {00FF00}Р›РµРєС†РёРё СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅС‹!", -1)
                         end)
                         break
                     elseif wasKeyPressed(vkeys.VK_N) and not sampIsChatInputActive() and not sampIsDialogActive() then
-                        sampAddChatMessage("{0633E5}[FM] {FF0000}Обновление лекций отменено пользователем.", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FF0000}РћР±РЅРѕРІР»РµРЅРёРµ Р»РµРєС†РёР№ РѕС‚РјРµРЅРµРЅРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј.", -1)
                         loadLecturesLocally()
                         answered = true
                         break
                     end
                 end
                 if not answered then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Время вышло. Обновление лекций отменено автоматически.", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}Р’СЂРµРјСЏ РІС‹С€Р»Рѕ. РћР±РЅРѕРІР»РµРЅРёРµ Р»РµРєС†РёР№ РѕС‚РјРµРЅРµРЅРѕ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.", -1)
                     loadLecturesLocally()
                 end
             end)
@@ -344,13 +348,13 @@ local function startLecturePlay(key)
         end
         lectureThread = nil
         if not stopLecture then
-            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Лекция окончена", -1)
+            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р›РµРєС†РёСЏ РѕРєРѕРЅС‡РµРЅР°", -1)
         end
         stopLecture = false
     end)
 end
 
--- ================= [ БАЗА ДАННЫХ И СИНХРОНИЗАЦИЯ ] =================
+-- ================= [ Р‘РђР—Рђ Р”РђРќРќР«РҐ Р РЎРРќРҐР РћРќРР—РђР¦РРЇ ] =================
 local function updateFromBase()
     queueHttpRequest(GAS_URL .. "?action=read&t=" .. os.time(), function(content)
         if content and (content:sub(1,1) == "[" or content:sub(1, 1) == "{") then
@@ -385,10 +389,10 @@ local function updateCadetInBase(name, col, joinDate, shouldSyncAfter, extraVal)
     
     queueHttpRequest(url, function(content)
         if content and (content:find("Not found") or content:find("Player not found")) then
-            sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Игрок {FFFFFF}" .. tostring(name) .. "{FF0000} не найден в таблице!", -1)
+            sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РРіСЂРѕРє {FFFFFF}" .. tostring(name) .. "{FF0000} РЅРµ РЅР°Р№РґРµРЅ РІ С‚Р°Р±Р»РёС†Рµ!", -1)
         else
             if shouldSyncAfter then
-                sampAddChatMessage("{0633E5}[FM] {00FF00}Отметка подтверждена базой. Обновляю данные кадетов...", -1)
+                sampAddChatMessage("{0633E5}[FM] {00FF00}РћС‚РјРµС‚РєР° РїРѕРґС‚РІРµСЂР¶РґРµРЅР° Р±Р°Р·РѕР№. РћР±РЅРѕРІР»СЏСЋ РґР°РЅРЅС‹Рµ РєР°РґРµС‚РѕРІ...", -1)
                 updateFromBase()
             end
         end
@@ -402,7 +406,7 @@ function syncAll(silent)
 
     lastSyncTimer = os.clock()
     if not silent and not forcedMasterSync then
-        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Синхронизация...", -1)
+        sampAddChatMessage("{0633E5}[FM] {FFFFFF}РЎРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ...", -1)
     end
     
     if myPrio >= 2 or isMaster or forcedMasterSync then
@@ -421,7 +425,7 @@ function syncAll(silent)
                 if os.clock() - timer > 3.0 then
                     isUpdating = false
                     if not silent then
-                        sampAddChatMessage("{0633E5}[FM] {FF0000}Таймаут команды /members (Сервер не ответил).", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FF0000}РўР°Р№РјР°СѓС‚ РєРѕРјР°РЅРґС‹ /members (РЎРµСЂРІРµСЂ РЅРµ РѕС‚РІРµС‚РёР»).", -1)
                     end
                     break
                 end
@@ -429,9 +433,9 @@ function syncAll(silent)
             
             if not silent and #cadetsOnline == 0 and myPrio >= 2 then
                 if forcedMasterSync then
-                    sampAddChatMessage("{0633E5}[FM] {FFFFFF}В сети нет кадетов, обновляем общий список /members.", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р’ СЃРµС‚Рё РЅРµС‚ РєР°РґРµС‚РѕРІ, РѕР±РЅРѕРІР»СЏРµРј РѕР±С‰РёР№ СЃРїРёСЃРѕРє /members.", -1)
                 else
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Кадетов в сети нет.", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РљР°РґРµС‚РѕРІ РІ СЃРµС‚Рё РЅРµС‚.", -1)
                 end
             end
         end)
@@ -492,14 +496,14 @@ function main()
     sampRegisterChatCommand("fm", function()
         if not isScriptActive then return end
         if not checkCooldown() then return end
-        local s = "1. Управление составом\n2. Управление кадетами\n3. Моя статистика"
-        sampShowDialog(9909, "{0633E5}Главное меню", s, "Выбрать", "Закрыть", 2)
+        local s = "1. РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј\n2. РЈРїСЂР°РІР»РµРЅРёРµ РєР°РґРµС‚Р°РјРё\n{0633E5}3. РњРѕСЏ СЃС‚Р°С‚РёСЃС‚РёРєР°"
+        sampShowDialog(9909, "{0633E5}Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ", s, "Р’С‹Р±СЂР°С‚СЊ", "Р—Р°РєСЂС‹С‚СЊ", 2)
     end)
     
     sampRegisterChatCommand("updc", function()
         if not isScriptActive then return end
         if not checkCooldown() then return end
-        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запуск ручного обновления...", -1)
+        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСѓСЃРє СЂСѓС‡РЅРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ...", -1)
         lua_thread.create(function()
             forcedMasterSync = true
             syncAll(false)
@@ -507,14 +511,14 @@ function main()
             while isUpdating do wait(100) end
             wait(1000)
             forcedMasterSync = false
-            sampAddChatMessage("{0633E5}[FM] {00FF00}Ручное обновление завершено.", -1)
+            sampAddChatMessage("{0633E5}[FM] {00FF00}Р СѓС‡РЅРѕРµ РѕР±РЅРѕРІР»РµРЅРёРµ Р·Р°РІРµСЂС€РµРЅРѕ.", -1)
         end)
     end)
 
     sampRegisterChatCommand("updmembers", function()
         if not isScriptActive then return end
         if not checkCooldown() then return end
-        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запуск принудительного обновления таблицы /members...", -1)
+        sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСѓСЃРє РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ С‚Р°Р±Р»РёС†С‹ /members...", -1)
         lua_thread.create(function()
             local oldMaster = isMaster
             isMaster = true
@@ -525,7 +529,7 @@ function main()
             wait(1000)
             isMaster = oldMaster
             forcedMasterSync = false
-            sampAddChatMessage("{0633E5}[FM] {00FF00}Обновление members завершено.", -1)
+            sampAddChatMessage("{0633E5}[FM] {00FF00}РћР±РЅРѕРІР»РµРЅРёРµ members Р·Р°РІРµСЂС€РµРЅРѕ.", -1)
         end)
     end)
 
@@ -553,7 +557,7 @@ function main()
             if checkCooldown() then
                 isScriptActive = not isScriptActive
                 if isScriptActive then
-                    sampAddChatMessage("{0633E5}[FM] {00FF00}Скрипт активирован! Определение прав...", -1)
+                    sampAddChatMessage("{0633E5}[FM] {00FF00}РЎРєСЂРёРїС‚ Р°РєС‚РёРІРёСЂРѕРІР°РЅ! РћРїСЂРµРґРµР»РµРЅРёРµ РїСЂР°РІ...", -1)
                     local res, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
                     local reqId = (res and myid ~= -1) and myid or 999999
                 
@@ -564,17 +568,17 @@ function main()
                                 myRole = data.role
                                 myPrio = data.prio
                                 isMaster = data.isMaster
-                                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Ваша роль: {00FF00}" .. myRole .. (isMaster and " (Мастер)" or ""), -1)
+                                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р’Р°С€Р° СЂРѕР»СЊ: {00FF00}" .. myRole .. (isMaster and " (РњР°СЃС‚РµСЂ)" or ""), -1)
                                 if myPrio >= 2 or isMaster then syncAll(true) end
                             else
-                                sampAddChatMessage("{0633E5}[FM] {FF0000}Ответ базы данных не распознан. Попробуйте еще раз.", -1)
+                                sampAddChatMessage("{0633E5}[FM] {FF0000}РћС‚РІРµС‚ Р±Р°Р·С‹ РґР°РЅРЅС‹С… РЅРµ СЂР°СЃРїРѕР·РЅР°РЅ. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·.", -1)
                             end
                         else
-                            sampAddChatMessage("{0633E5}[FM] {FF0000}База данных не ответила.", -1)
+                            sampAddChatMessage("{0633E5}[FM] {FF0000}Р‘Р°Р·Р° РґР°РЅРЅС‹С… РЅРµ РѕС‚РІРµС‚РёР»Р°.", -1)
                         end
                     end)
                 else
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Скрипт выключен!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РЎРєСЂРёРїС‚ РІС‹РєР»СЋС‡РµРЅ!", -1)
                 end
             end
         end
@@ -589,10 +593,10 @@ function main()
                         local res, data = pcall(decodeJson, content)
                         if res and type(data) == "table" then
                             if myRole ~= data.role then
-                                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Ваша роль обновлена: {00FF00}" .. data.role, -1)
+                                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р’Р°С€Р° СЂРѕР»СЊ РѕР±РЅРѕРІР»РµРЅР°: {00FF00}" .. data.role, -1)
                             end
                             if not isMaster and data.isMaster then
-                                sampAddChatMessage("{0633E5}[FM] {00FF00}Вы назначены Мастером сессии. /members синхронизируется через вас.", -1)
+                                sampAddChatMessage("{0633E5}[FM] {00FF00}Р’С‹ РЅР°Р·РЅР°С‡РµРЅС‹ РњР°СЃС‚РµСЂРѕРј СЃРµСЃСЃРёРё. /members СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµС‚СЃСЏ С‡РµСЂРµР· РІР°СЃ.", -1)
                             end
                             myRole = data.role
                             myPrio = data.prio
@@ -613,7 +617,7 @@ function main()
 
             if isKeyDown(vkeys.VK_CONTROL) and wasKeyPressed(vkeys.VK_R) then
                 if not sampIsChatInputActive() and not sampIsDialogActive() then
-                    sampAddChatMessage("{0633E5}[FM] {FFFFFF}Принудительная остановка и перезагрузка...", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FFFFFF}РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅР°СЏ РѕСЃС‚Р°РЅРѕРІРєР° Рё РїРµСЂРµР·Р°РіСЂСѓР·РєР°...", -1)
                     if lectureThread then
                         stopLecture = true
                         pcall(function() lectureThread:terminate() end) 
@@ -630,17 +634,17 @@ function main()
             if wasKeyPressed(vkeys.VK_I) and not sampIsChatInputActive() and not sampIsDialogActive() then
                 if lectureThread then
                     paused = not paused
-                    sampAddChatMessage(paused and "{0633E5}[FM] {FF0000}Лекция на паузе" or "{0633E5}[FM] {00FF00}Лекция продолжена", -1)
+                    sampAddChatMessage(paused and "{0633E5}[FM] {FF0000}Р›РµРєС†РёСЏ РЅР° РїР°СѓР·Рµ" or "{0633E5}[FM] {00FF00}Р›РµРєС†РёСЏ РїСЂРѕРґРѕР»Р¶РµРЅР°", -1)
                 end
             end
 
             if showHUD and myPrio >= 2 and not isKeyDown(vkeys.VK_F7) and font then
                 local count = #cadetsOnline
-                local boxWidth = renderGetFontDrawTextLength(font, "Кадеты Онлайн") + 20
+                local boxWidth = renderGetFontDrawTextLength(font, "РљР°РґРµС‚С‹ РћРЅР»Р°Р№РЅ") + 20
                 if count > 0 then
                     for i, v in ipairs(cadetsOnline) do
                         if v and v.displayName and v.id then
-                            local fullText = string.format("%d. %s [%s] [Л][Т][П][Д]", i, v.displayName, v.id)
+                            local fullText = string.format("%d. %s [%s] [Р›][Рў][Рџ][Р”]", i, v.displayName, v.id)
                             local w = renderGetFontDrawTextLength(font, fullText) + 15
                             if w > boxWidth then boxWidth = w end
                         end
@@ -649,7 +653,7 @@ function main()
 
                 local boxHeight = count > 0 and (35 + (count * 14)) or 50
                 renderDrawBox(20, 320, boxWidth, boxHeight, 0x95000000)
-                renderFontDrawText(font, "Кадеты Онлайн", 28, 325, 0xFF4682B4)
+                renderFontDrawText(font, "РљР°РґРµС‚С‹ РћРЅР»Р°Р№РЅ", 28, 325, 0xFF4682B4)
                 
                 if count > 0 then
                     local renderIndex = 1
@@ -676,42 +680,41 @@ function main()
                                 renderFontDrawText(font, textBase, baseX, baseY, 0xFFFFFFFF)
                                 
                                 local offset = renderGetFontDrawTextLength(font, textBase)
-                                renderFontDrawText(font, "[Л]", baseX + offset, baseY, l and 0xFF00FF00 or 0xFFFF4D4D)
-                                offset = offset + renderGetFontDrawTextLength(font, "[Л]")
-                                renderFontDrawText(font, "[Т]", baseX + offset, baseY, t and 0xFF00FF00 or 0xFFFF4D4D)
-                                offset = offset + renderGetFontDrawTextLength(font, "[Т]")
-                                renderFontDrawText(font, "[П]", baseX + offset, baseY, p and 0xFF00FF00 or 0xFFFF4D4D)
-                                offset = offset + renderGetFontDrawTextLength(font, "[П]")
-                                renderFontDrawText(font, "[Д]", baseX + offset, baseY, dPassed and 0xFF00FF00 or 0xFFFF4D4D)
+                                renderFontDrawText(font, "[Р›]", baseX + offset, baseY, l and 0xFF00FF00 or 0xFFFF4D4D)
+                                offset = offset + renderGetFontDrawTextLength(font, "[Р›]")
+                                renderFontDrawText(font, "[Рў]", baseX + offset, baseY, t and 0xFF00FF00 or 0xFFFF4D4D)
+                                offset = offset + renderGetFontDrawTextLength(font, "[Рў]")
+                                renderFontDrawText(font, "[Рџ]", baseX + offset, baseY, p and 0xFF00FF00 or 0xFFFF4D4D)
+                                offset = offset + renderGetFontDrawTextLength(font, "[Рџ]")
+                                renderFontDrawText(font, "[Р”]", baseX + offset, baseY, dPassed and 0xFF00FF00 or 0xFFFF4D4D)
                             end
                             
                             renderIndex = renderIndex + 1
                         end
                     end
                 else
-                    renderFontDrawText(font, "—", 28, 345, 0xFFFFFFFF)
+                    renderFontDrawText(font, "вЂ”", 28, 345, 0xFFFFFFFF)
                 end
             end
         end
     end
 end
 
--- ================= [ ОБРАБОТКА ДИАЛОГОВ ] =================
+-- ================= [ РћР‘Р РђР‘РћРўРљРђ Р”РРђР›РћР“РћР’ ] =================
 function sampev.onSendDialogResponse(id, btn, lst, inp)
     if not checkCooldown() then return false end 
 
     if id == 9909 then
         if btn == 1 then
             if lst == 0 then 
-                -- ПРОВЕРКА ПРАВ: ТОЛЬКО STAFF (3) И SUPERADMIN (4)
                 if myPrio < 3 then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Управление составом доступно только для Staff и SuperAdmin.", -1)
-                    lua_thread.create(function() wait(50); sampShowDialog(9909, "{0633E5}Главное меню", "1. Управление составом\n2. Управление кадетами\n3. Моя статистика", "Выбрать", "Закрыть", 2) end)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј РґРѕСЃС‚СѓРїРЅРѕ С‚РѕР»СЊРєРѕ РґР»СЏ Staff Рё SuperAdmin.", -1)
+                    lua_thread.create(function() wait(50); sampShowDialog(9909, "{0633E5}Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ", "1. РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј\n2. РЈРїСЂР°РІР»РµРЅРёРµ РєР°РґРµС‚Р°РјРё\n{0633E5}3. РњРѕСЏ СЃС‚Р°С‚РёСЃС‚РёРєР°", "Р’С‹Р±СЂР°С‚СЊ", "Р—Р°РєСЂС‹С‚СЊ", 2) end)
                     return false
                 end
                 lua_thread.create(function() 
                     wait(50)
-                    sampShowDialog(9930, "{0633E5}Управление составом", "Список людей онлайн на повышение\nУправление игроками (онлайн)\nУправление игроками (оффлайн)", "Выбрать", "Назад", 2)
+                    sampShowDialog(9930, "{0633E5}РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј", "РЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({00FF00}РѕРЅР»Р°Р№РЅ{FFFFFF})\nРЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({FF0000}РѕС„С„Р»Р°Р№РЅ{FFFFFF})", "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2)
                 end)
             elseif lst == 1 then 
                 lua_thread.create(function() wait(50); openFmMenu() end)
@@ -724,49 +727,43 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
     elseif id == 9930 then
         if btn == 1 then
             if lst == 0 then
-                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Список людей на повышение - {FF0000}В разработке", -1)
-                lua_thread.create(function() 
-                    wait(50)
-                    sampShowDialog(9930, "{0633E5}Управление составом", "Список людей онлайн на повышение\nУправление игроками (онлайн)\nУправление игроками (оффлайн)", "Выбрать", "Назад", 2)
-                end)
-            elseif lst == 1 then
-                local s = "Ник\tЗвание\n"
-                s = s .. "{FFD700}?? Обновить список\t-\n" 
+                local s = "РќРёРє\tР—РІР°РЅРёРµ\n"
+                s = s .. "{0633E5}РћР±РЅРѕРІРёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ\t-\n" 
                 if #factionOnline > 0 then
                     for i, v in ipairs(factionOnline) do
-                        local displayRank = (v.rank and v.rank ~= "") and v.rank or "Неизвестно"
+                        local displayRank = (v.rank and v.rank ~= "") and v.rank or "РќРµРёР·РІРµСЃС‚РЅРѕ"
                         s = s .. v.rawName .. " [" .. v.id .. "]\t{A9A9A9}" .. displayRank .. "\n"
                     end
                 end
-                lua_thread.create(function() wait(50); sampShowDialog(9932, "{0633E5}Выберите игрока (онлайн)", s, "Выбрать", "Назад", 5) end)
-            elseif lst == 2 then
+                lua_thread.create(function() wait(50); sampShowDialog(9932, "{0633E5}Р’С‹Р±РµСЂРёС‚Рµ РёРіСЂРѕРєР° (РѕРЅР»Р°Р№РЅ)", s, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 5) end)
+            elseif lst == 1 then
                 local depts = "Staff\nPolice Academy [PA]\nCentral Patrol Division [CPD]\nCrime Scene Investigation [CSI]\nCadets"
-                lua_thread.create(function() wait(50); sampShowDialog(9933, "{0633E5}Выберите отдел", depts, "Выбрать", "Назад", 2) end)
+                lua_thread.create(function() wait(50); sampShowDialog(9933, "{0633E5}Р’С‹Р±РµСЂРёС‚Рµ РѕС‚РґРµР»", depts, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
             end
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9909, "{0633E5}Главное меню", "1. Управление составом\n2. Управление кадетами\n3. Моя статистика", "Выбрать", "Закрыть", 2) end)
+            lua_thread.create(function() wait(50); sampShowDialog(9909, "{0633E5}Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ", "1. РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј\n2. РЈРїСЂР°РІР»РµРЅРёРµ РєР°РґРµС‚Р°РјРё\n{0633E5}3. РњРѕСЏ СЃС‚Р°С‚РёСЃС‚РёРєР°", "Р’С‹Р±СЂР°С‚СЊ", "Р—Р°РєСЂС‹С‚СЊ", 2) end)
         end
         return false
 
     elseif id == 9932 then 
         if btn == 1 then
             if lst == 0 then 
-                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запрашиваем свежий список /members...", -1)
+                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСЂР°С€РёРІР°РµРј СЃРІРµР¶РёР№ СЃРїРёСЃРѕРє /members...", -1)
                 lua_thread.create(function()
                     syncAll(true) 
                     local timer = os.clock()
                     while isUpdating and (os.clock() - timer < 3.0) do wait(100) end
                     wait(300) 
                     
-                    local s = "Ник\tЗвание\n"
-                    s = s .. "{FFD700}?? Обновить список\t-\n"
+                    local s = "РќРёРє\tР—РІР°РЅРёРµ\n"
+                    s = s .. "{0633E5}РћР±РЅРѕРІРёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ\t-\n"
                     if #factionOnline > 0 then
                         for i, v in ipairs(factionOnline) do
-                            local displayRank = (v.rank and v.rank ~= "") and v.rank or "Неизвестно"
+                            local displayRank = (v.rank and v.rank ~= "") and v.rank or "РќРµРёР·РІРµСЃС‚РЅРѕ"
                             s = s .. v.rawName .. " [" .. v.id .. "]\t{A9A9A9}" .. displayRank .. "\n"
                         end
                     end
-                    sampShowDialog(9932, "{0633E5}Выберите игрока (онлайн)", s, "Выбрать", "Назад", 5)
+                    sampShowDialog(9932, "{0633E5}Р’С‹Р±РµСЂРёС‚Рµ РёРіСЂРѕРєР° (РѕРЅР»Р°Р№РЅ)", s, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 5)
                 end)
                 return false
             end
@@ -774,10 +771,11 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
             local selected = factionOnline[lst] 
             if selected then
                 selectedStaffMember = selected.rawName
-                lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Действия: " .. selectedStaffMember, "Перенос между отделами\nВыдать выговор\nОставить комментарий\n{A020F0}Информация о сотруднике", "Выбрать", "Назад", 2) end)
+                local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
+                lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
             end
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9930, "{0633E5}Управление составом", "Список людей онлайн на повышение\nУправление игроками (онлайн)\nУправление игроками (оффлайн)", "Выбрать", "Назад", 2) end)
+            lua_thread.create(function() wait(50); sampShowDialog(9930, "{0633E5}РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј", "РЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({00FF00}РѕРЅР»Р°Р№РЅ{FFFFFF})\nРЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({FF0000}РѕС„С„Р»Р°Р№РЅ{FFFFFF})", "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
 
@@ -786,13 +784,13 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
             local deptsList = {"Staff", "Police Academy [PA]", "Central Patrol Division [CPD]", "Crime Scene Investigation [CSI]", "Cadets"}
             local selectedDept = deptsList[lst + 1]
             if selectedDept then
-                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Загрузка списка сотрудников отдела " .. selectedDept .. "...", -1)
+                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РіСЂСѓР·РєР° СЃРїРёСЃРєР° СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РѕС‚РґРµР»Р° " .. selectedDept .. "...", -1)
                 
                 queueHttpRequest(GAS_URL .. "?action=get_dept&dept=" .. urlencode(safe_u8(selectedDept)), function(content)
                     if content and (content:sub(1,1) == "[" or content:sub(1,1) == "{") then
                         local res, data = pcall(decodeJson, content)
                         if res and type(data) == "table" and #data > 0 then
-                            local s = "Ник\tЗвание\n"
+                            local s = "РќРёРє\tР—РІР°РЅРёРµ\n"
                             offlineMembersList = {}
                             for i, item in ipairs(data) do
                                 local decodedName = ""
@@ -807,21 +805,21 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
                                 
                                 table.insert(offlineMembersList, decodedName)
                                 
-                                local displayRank = (decodedRank and decodedRank ~= "") and decodedRank or "Неизвестно"
+                                local displayRank = (decodedRank and decodedRank ~= "") and decodedRank or "РќРµРёР·РІРµСЃС‚РЅРѕ"
                                 s = s .. decodedName .. "\t{A9A9A9}" .. displayRank .. "\n"
                             end
-                            lua_thread.create(function() wait(50); sampShowDialog(9938, "{0633E5}Сотрудники: " .. selectedDept, s, "Выбрать", "Назад", 5) end)
+                            lua_thread.create(function() wait(50); sampShowDialog(9938, "{0633E5}РЎРѕС‚СЂСѓРґРЅРёРєРё: " .. selectedDept, s, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 5) end)
                         else
-                            sampAddChatMessage("{0633E5}[FM] {FF0000}Отдел пуст или данные не найдены.", -1)
-                            lua_thread.create(function() wait(50); sampShowDialog(9933, "{0633E5}Выберите отдел", "Staff\nPolice Academy [PA]\nCentral Patrol Division [CPD]\nCrime Scene Investigation [CSI]\nCadets", "Выбрать", "Назад", 2) end)
+                            sampAddChatMessage("{0633E5}[FM] {FF0000}РћС‚РґРµР» РїСѓСЃС‚ РёР»Рё РґР°РЅРЅС‹Рµ РЅРµ РЅР°Р№РґРµРЅС‹.", -1)
+                            lua_thread.create(function() wait(50); sampShowDialog(9933, "{0633E5}Р’С‹Р±РµСЂРёС‚Рµ РѕС‚РґРµР»", "Staff\nPolice Academy [PA]\nCentral Patrol Division [CPD]\nCrime Scene Investigation [CSI]\nCadets", "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
                         end
                     else
-                        sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка. Сервер вернул неверные данные.", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°. РЎРµСЂРІРµСЂ РІРµСЂРЅСѓР» РЅРµРІРµСЂРЅС‹Рµ РґР°РЅРЅС‹Рµ.", -1)
                     end
                 end)
             end
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9930, "{0633E5}Управление составом", "Список людей онлайн на повышение\nУправление игроками (онлайн)\nУправление игроками (оффлайн)", "Выбрать", "Назад", 2) end)
+            lua_thread.create(function() wait(50); sampShowDialog(9930, "{0633E5}РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј", "РЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({00FF00}РѕРЅР»Р°Р№РЅ{FFFFFF})\nРЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({FF0000}РѕС„С„Р»Р°Р№РЅ{FFFFFF})", "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
 
@@ -830,31 +828,39 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
             local selected = offlineMembersList[lst + 1]
             if selected then
                 selectedStaffMember = selected
-                lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Действия: " .. selectedStaffMember, "Перенос между отделами\nВыдать выговор\nОставить комментарий\n{A020F0}Информация о сотруднике", "Выбрать", "Назад", 2) end)
+                local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
+                lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
             end
         else
             local depts = "Staff\nPolice Academy [PA]\nCentral Patrol Division [CPD]\nCrime Scene Investigation [CSI]\nCadets"
-            lua_thread.create(function() wait(50); sampShowDialog(9933, "{0633E5}Выберите отдел", depts, "Выбрать", "Назад", 2) end)
+            lua_thread.create(function() wait(50); sampShowDialog(9933, "{0633E5}Р’С‹Р±РµСЂРёС‚Рµ РѕС‚РґРµР»", depts, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
 
     elseif id == 9934 then 
         if btn == 1 then
+            local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
             if lst == 0 then 
                 local depts = "Staff\nPolice Academy [PA]\nCentral Patrol Division [CPD]\nCrime Scene Investigation [CSI]\nCadets"
-                lua_thread.create(function() wait(50); sampShowDialog(9935, "{0633E5}Перенос: " .. selectedStaffMember, depts, "Выбрать", "Назад", 2) end)
+                lua_thread.create(function() wait(50); sampShowDialog(9935, "{0633E5}РџРµСЂРµРЅРѕСЃ: " .. selectedStaffMember, depts, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
             elseif lst == 1 then 
-                lua_thread.create(function() wait(50); sampShowDialog(9936, "{0633E5}Выговор: " .. selectedStaffMember, "{FFFFFF}Введите причину выговора:", "Выдать", "Назад", 1) end)
+                sampAddChatMessage("{0633E5}[FM] {FF0000}РќРµ СЂРµР°Р»РёР·РѕРІР°РЅРѕ", -1)
+                lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
             elseif lst == 2 then 
-                lua_thread.create(function() wait(50); sampShowDialog(9937, "{0633E5}Комментарий: " .. selectedStaffMember, "{FFFFFF}Введите текст комментария:", "Отправить", "Назад", 1) end)
+                lua_thread.create(function() wait(50); sampShowDialog(9936, "{0633E5}Р’С‹РіРѕРІРѕСЂ: " .. selectedStaffMember, "{FFFFFF}Р’РІРµРґРёС‚Рµ РїСЂРёС‡РёРЅСѓ РІС‹РіРѕРІРѕСЂР°:", "Р’С‹РґР°С‚СЊ", "РќР°Р·Р°Рґ", 1) end)
             elseif lst == 3 then 
-                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запрос информации о сотруднике " .. selectedStaffMember .. "...", -1)
+                lua_thread.create(function() wait(50); sampShowDialog(9937, "{0633E5}РљРѕРјРјРµРЅС‚Р°СЂРёР№: " .. selectedStaffMember, "{FFFFFF}Р’РІРµРґРёС‚Рµ С‚РµРєСЃС‚ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ:", "РћС‚РїСЂР°РІРёС‚СЊ", "РќР°Р·Р°Рґ", 1) end)
+            elseif lst == 4 or lst == 5 or lst == 6 then
+                sampAddChatMessage("{0633E5}[FM] {FF0000}РќРµ СЂРµР°Р»РёР·РѕРІР°РЅРѕ", -1)
+                lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
+            elseif lst == 7 then 
+                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСЂРѕСЃ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ " .. selectedStaffMember .. "...", -1)
                 queueHttpRequest(GAS_URL .. "?action=mystat&name=" .. urlencode(safe_u8(selectedStaffMember)), function(content)
                     if content and content ~= "" then
                         local res, data = pcall(decodeJson, content)
                         if res and type(data) == "table" and data.sheet and data.headers and data.row then
-                            local sheetName = u8:decode(tostring(data.sheet)) or "Неизвестно"
-                            local text = string.format("{00FF00}Подразделение:{FFFFFF} %s\n\n", sheetName)
+                            local sheetName = u8:decode(tostring(data.sheet)) or "РќРµРёР·РІРµСЃС‚РЅРѕ"
+                            local text = ""
                             
                             local h = data.headers
                             local r = data.row
@@ -866,79 +872,89 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
                                     
                                     if headerName ~= "" and rowValue ~= "" and rowValue ~= "0" and rowValue ~= "false" then
                                         text = text .. "{A020F0}" .. headerName .. ":{FFFFFF} " .. rowValue .. "\n"
+                                        
+                                        
+                                        if headerName == "Р—РІР°РЅРёРµ" then
+                                            text = text .. "{A020F0}РћС‚РґРµР»:{FFFFFF} " .. sheetName .. "\n"
+                                        elseif headerName == "РќРёРє" and sheetName == "Cadets" then
+                                            text = text .. "{A020F0}РћС‚РґРµР»:{FFFFFF} " .. sheetName .. "\n"
+                                        end
                                     end
                                 end
                             end
                             
-                            local titleNick = r[1] and u8:decode(tostring(r[1])) or selectedStaffMember
-                            sampShowDialog(9940, "{0633E5}Информация: " .. titleNick, text, "Назад", "", 0)
+                            sampShowDialog(9940, "{0633E5}РЎС‚Р°С‚РёСЃС‚РёРєР°", text, "РќР°Р·Р°Рґ", "", 0)
                         else
-                            sampAddChatMessage("{0633E5}[FM] {FF0000}Данные сотрудника не найдены.", -1)
+                            sampAddChatMessage("{0633E5}[FM] {FF0000}Р”Р°РЅРЅС‹Рµ СЃРѕС‚СЂСѓРґРЅРёРєР° РЅРµ РЅР°Р№РґРµРЅС‹.", -1)
                         end
                     else
-                        sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Пустой ответ от сервера.", -1)
+                        sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РџСѓСЃС‚РѕР№ РѕС‚РІРµС‚ РѕС‚ СЃРµСЂРІРµСЂР°.", -1)
                     end
                 end)
             end
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9930, "{0633E5}Управление составом", "Список людей онлайн на повышение\nУправление игроками (онлайн)\nУправление игроками (оффлайн)", "Выбрать", "Назад", 2) end)
+            lua_thread.create(function() wait(50); sampShowDialog(9930, "{0633E5}РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј", "РЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({00FF00}РѕРЅР»Р°Р№РЅ{FFFFFF})\nРЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєР°РјРё ({FF0000}РѕС„С„Р»Р°Р№РЅ{FFFFFF})", "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
         
     elseif id == 9940 then
-        lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Действия: " .. selectedStaffMember, "Перенос между отделами\nВыдать выговор\nОставить комментарий\n{A020F0}Информация о сотруднике", "Выбрать", "Назад", 2) end)
+        local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
+        lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         return false
 
     elseif id == 9935 then 
         if btn == 1 then
             local depts = {"Staff", "Police Academy [PA]", "Central Patrol Division [CPD]", "Crime Scene Investigation [CSI]", "Cadets"}
             local targetDept = depts[lst + 1]
-            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запрос на перенос отправлен...", -1)
+            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСЂРѕСЃ РЅР° РїРµСЂРµРЅРѕСЃ РѕС‚РїСЂР°РІР»РµРЅ...", -1)
             local url = GAS_URL .. "?action=move_dept&name=" .. urlencode(safe_u8(selectedStaffMember)) .. "&target=" .. urlencode(safe_u8(targetDept)) .. "&inst=" .. urlencode(safe_u8(GetNick()))
             queueHttpRequest(url, function(content)
                 if content and (content:find("Not found") or content:find("Player not found")) then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Сотрудник {FFFFFF}" .. tostring(selectedStaffMember) .. "{FF0000} не найден в таблице!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РЎРѕС‚СЂСѓРґРЅРёРє {FFFFFF}" .. tostring(selectedStaffMember) .. "{FF0000} РЅРµ РЅР°Р№РґРµРЅ РІ С‚Р°Р±Р»РёС†Рµ!", -1)
                 else
-                    sampAddChatMessage("{0633E5}[FM] {00FF00}Игрок {FFFFFF}" .. tostring(selectedStaffMember) .. "{00FF00} перенесен в {FFFFFF}" .. targetDept .. "{00FF00}!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {00FF00}РРіСЂРѕРє {FFFFFF}" .. tostring(selectedStaffMember) .. "{00FF00} РїРµСЂРµРЅРµСЃРµРЅ РІ {FFFFFF}" .. targetDept .. "{00FF00}!", -1)
                     updateFromBase()
                 end
             end)
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Действия: " .. selectedStaffMember, "Перенос между отделами\nВыдать выговор\nОставить комментарий\n{A020F0}Информация о сотруднике", "Выбрать", "Назад", 2) end)
+            local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
+            lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
 
     elseif id == 9936 then 
         if btn == 1 and inp and inp ~= "" then
-            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запись выговора...", -1)
+            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїРёСЃСЊ РІС‹РіРѕРІРѕСЂР°...", -1)
             local url = GAS_URL .. "?action=update_offline&name=" .. urlencode(safe_u8(selectedStaffMember)) .. "&col=warning&val=" .. urlencode(safe_u8(inp)) .. "&inst=" .. urlencode(safe_u8(GetNick()))
             queueHttpRequest(url, function(content)
                 if content and (content:find("Not found") or content:find("Player not found")) then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Сотрудник {FFFFFF}" .. tostring(selectedStaffMember) .. "{FF0000} не найден в таблице!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РЎРѕС‚СЂСѓРґРЅРёРє {FFFFFF}" .. tostring(selectedStaffMember) .. "{FF0000} РЅРµ РЅР°Р№РґРµРЅ РІ С‚Р°Р±Р»РёС†Рµ!", -1)
                 else
-                    sampAddChatMessage("{0633E5}[FM] {00FF00}Выговор игроку {FFFFFF}" .. tostring(selectedStaffMember) .. "{00FF00} успешно записан!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {00FF00}Р’С‹РіРѕРІРѕСЂ РёРіСЂРѕРєСѓ {FFFFFF}" .. tostring(selectedStaffMember) .. "{00FF00} СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ!", -1)
                     updateFromBase()
                 end
             end)
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Действия: " .. selectedStaffMember, "Перенос между отделами\nВыдать выговор\nОставить комментарий\n{A020F0}Информация о сотруднике", "Выбрать", "Назад", 2) end)
+            local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
+            lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
 
     elseif id == 9937 then 
         if btn == 1 and inp and inp ~= "" then
-            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запись комментария...", -1)
+            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїРёСЃСЊ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ...", -1)
             local url = GAS_URL .. "?action=update_offline&name=" .. urlencode(safe_u8(selectedStaffMember)) .. "&col=comment&val=" .. urlencode(safe_u8(inp)) .. "&inst=" .. urlencode(safe_u8(GetNick()))
             queueHttpRequest(url, function(content)
                 if content and (content:find("Not found") or content:find("Player not found")) then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: Сотрудник {FFFFFF}" .. tostring(selectedStaffMember) .. "{FF0000} не найден в таблице!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: РЎРѕС‚СЂСѓРґРЅРёРє {FFFFFF}" .. tostring(selectedStaffMember) .. "{FF0000} РЅРµ РЅР°Р№РґРµРЅ РІ С‚Р°Р±Р»РёС†Рµ!", -1)
                 else
-                    sampAddChatMessage("{0633E5}[FM] {00FF00}Комментарий к {FFFFFF}" .. tostring(selectedStaffMember) .. "{00FF00} успешно записан!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {00FF00}РљРѕРјРјРµРЅС‚Р°СЂРёР№ Рє {FFFFFF}" .. tostring(selectedStaffMember) .. "{00FF00} СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ!", -1)
                     updateFromBase() 
                 end
             end)
         else
-            lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Действия: " .. selectedStaffMember, "Перенос между отделами\nВыдать выговор\nОставить комментарий\n{A020F0}Информация о сотруднике", "Выбрать", "Назад", 2) end)
+            local actionsText = "РџРµСЂРµРЅРѕСЃ РјРµР¶РґСѓ РѕС‚РґРµР»Р°РјРё\nРР·РјРµРЅРёС‚СЊ РґРѕР»Р¶РЅРѕСЃС‚СЊ РІ РѕС‚РґРµР»Рµ\nР’С‹РґР°С‚СЊ РІС‹РіРѕРІРѕСЂ\nРћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№\n{00FF00}РџРѕРІС‹СЃРёС‚СЊ\n{FF0000}РџРѕРЅРёР·РёС‚СЊ\n{FF0000}РЈРІРѕР»РёС‚СЊ\n{0633E5}РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ"
+            lua_thread.create(function() wait(50); sampShowDialog(9934, "{0633E5}Р”РµР№СЃС‚РІРёСЏ: " .. selectedStaffMember, actionsText, "Р’С‹Р±СЂР°С‚СЊ", "РќР°Р·Р°Рґ", 2) end)
         end
         return false
 
@@ -946,23 +962,23 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
         if btn == 1 then
             if lst == 0 then 
                 showHUD = not showHUD
-                sampAddChatMessage(showHUD and "{0633E5}[FM] {00FF00}HUD включен" or "{0633E5}[FM] {FF0000}HUD выключен", -1)
+                sampAddChatMessage(showHUD and "{0633E5}[FM] {00FF00}HUD РІРєР»СЋС‡РµРЅ" or "{0633E5}[FM] {FF0000}HUD РІС‹РєР»СЋС‡РµРЅ", -1)
                 lua_thread.create(function() wait(50); openFmMenu() end)
             elseif lst == 1 then 
                 if myPrio < 2 then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Вам недоступно чтение лекций.", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}Р’Р°Рј РЅРµРґРѕСЃС‚СѓРїРЅРѕ С‡С‚РµРЅРёРµ Р»РµРєС†РёР№.", -1)
                     lua_thread.create(function() wait(50); openFmMenu() end)
                     return false
                 end
                 if #lectureKeys == 0 then loadLecturesLocally() end
                 if #lectureKeys == 0 then
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Список лекций пуст!", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РЎРїРёСЃРѕРє Р»РµРєС†РёР№ РїСѓСЃС‚!", -1)
                     lua_thread.create(function() wait(50); openFmMenu() end)
                     return false
                 end
                 local s = ""
                 for _, k in ipairs(lectureKeys) do s = s .. k .. "\n" end
-                lua_thread.create(function() wait(50); sampShowDialog(9913, "{0633E5}Меню лекций", s, "Выбрать", "Отмена", 2) end)
+                lua_thread.create(function() wait(50); sampShowDialog(9913, "{0633E5}РњРµРЅСЋ Р»РµРєС†РёР№", s, "Р’С‹Р±СЂР°С‚СЊ", "РћС‚РјРµРЅР°", 2) end)
             elseif lst == 2 then 
                 syncAll(false)
             else 
@@ -971,7 +987,7 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
                     if selectedCadet and selectedCadet.displayName then
                         lua_thread.create(function()
                             wait(50)
-                            sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Лекция\nТеория\nПрактика\nОтчет\nКомментарий\n{A020F0}Информация\n{FF0000}Сброс прогресса", "ОК", "Назад", 2)
+                            sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Р›РµРєС†РёСЏ\nРўРµРѕСЂРёСЏ\nРџСЂР°РєС‚РёРєР°\nРћС‚С‡РµС‚\nРљРѕРјРјРµРЅС‚Р°СЂРёР№\n{A020F0}РРЅС„РѕСЂРјР°С†РёСЏ\n{FF0000}РЎР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°", "РћРљ", "РќР°Р·Р°Рґ", 2)
                         end)
                     end
                 end
@@ -979,7 +995,7 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
         else
             lua_thread.create(function() 
                 wait(50)
-                sampShowDialog(9909, "{0633E5}Главное меню", "1. Управление составом\n2. Управление кадетами\n3. Моя статистика", "Выбрать", "Закрыть", 2)
+                sampShowDialog(9909, "{0633E5}Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ", "1. РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚Р°РІРѕРј\n2. РЈРїСЂР°РІР»РµРЅРёРµ РєР°РґРµС‚Р°РјРё\n{0633E5}3. РњРѕСЏ СЃС‚Р°С‚РёСЃС‚РёРєР°", "Р’С‹Р±СЂР°С‚СЊ", "Р—Р°РєСЂС‹С‚СЊ", 2)
             end)
         end
         return false
@@ -990,33 +1006,33 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
             
             if lst == 5 then
                 local db = cadetsDB and cadetsDB[safeName] or nil
-                local l = (db and isMarked(db.lecture)) and "{00FF00}прошел" or "{FF0000}не прошел"
-                local t = (db and isMarked(db.theory)) and "{00FF00}прошел" or "{FF0000}не прошел"
-                local p = (db and isMarked(db.practice)) and "{00FF00}прошел" or "{FF0000}не прошел"
-                local d = (db and isMarked(db.isTwoDays)) and "{00FF00}прошло" or "{FF0000}не прошло"
-                local rep = (db and db.report and db.report ~= "") and "{00FF00}залит" or "{FF0000}не залит"
-                local com = (db and db.comment and db.comment ~= "") and "{00FF00}добавлен" or "{FF0000}не добавлен"
-                local info_text = string.format("Лекция: %s\n{FFFFFF}Теория: %s\n{FFFFFF}Практика: %s\n{FFFFFF}Два дня: %s\n{FFFFFF}Отчет: %s\n{FFFFFF}Комментарий: %s", l, t, p, d, rep, com)
-                lua_thread.create(function() wait(50); sampShowDialog(9912, "{0633E5}Инфо: " .. (selectedCadet.displayName or ""), info_text, "Назад", "", 0) end)
+                local l = (db and isMarked(db.lecture)) and "{00FF00}РїСЂРѕС€РµР»" or "{FF0000}РЅРµ РїСЂРѕС€РµР»"
+                local t = (db and isMarked(db.theory)) and "{00FF00}РїСЂРѕС€РµР»" or "{FF0000}РЅРµ РїСЂРѕС€РµР»"
+                local p = (db and isMarked(db.practice)) and "{00FF00}РїСЂРѕС€РµР»" or "{FF0000}РЅРµ РїСЂРѕС€РµР»"
+                local d = (db and isMarked(db.isTwoDays)) and "{00FF00}РїСЂРѕС€Р»Рѕ" or "{FF0000}РЅРµ РїСЂРѕС€Р»Рѕ"
+                local rep = (db and db.report and db.report ~= "") and "{00FF00}Р·Р°Р»РёС‚" or "{FF0000}РЅРµ Р·Р°Р»РёС‚"
+                local com = (db and db.comment and db.comment ~= "") and "{00FF00}РґРѕР±Р°РІР»РµРЅ" or "{FF0000}РЅРµ РґРѕР±Р°РІР»РµРЅ"
+                local info_text = string.format("Р›РµРєС†РёСЏ: %s\n{FFFFFF}РўРµРѕСЂРёСЏ: %s\n{FFFFFF}РџСЂР°РєС‚РёРєР°: %s\n{FFFFFF}Р”РІР° РґРЅСЏ: %s\n{FFFFFF}РћС‚С‡РµС‚: %s\n{FFFFFF}РљРѕРјРјРµРЅС‚Р°СЂРёР№: %s", l, t, p, d, rep, com)
+                lua_thread.create(function() wait(50); sampShowDialog(9912, "{0633E5}РРЅС„Рѕ: " .. (selectedCadet.displayName or ""), info_text, "РќР°Р·Р°Рґ", "", 0) end)
             elseif lst == 6 then
-                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запрос на сброс отправлен...", -1)
+                sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСЂРѕСЃ РЅР° СЃР±СЂРѕСЃ РѕС‚РїСЂР°РІР»РµРЅ...", -1)
                 if cadetsDB and cadetsDB[safeName] then cadetsDB[safeName] = nil end
                 updateCadetInBase(selectedCadet.rawName, "reset", nil, true)
                 lua_thread.create(function()
                     wait(100)
                     if selectedCadet and selectedCadet.displayName then
-                        sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Лекция\nТеория\nПрактика\nОтчет\nКомментарий\n{A020F0}Информация\n{FF0000}Сброс прогресса", "ОК", "Назад", 2)
+                        sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Р›РµРєС†РёСЏ\nРўРµРѕСЂРёСЏ\nРџСЂР°РєС‚РёРєР°\nРћС‚С‡РµС‚\nРљРѕРјРјРµРЅС‚Р°СЂРёР№\n{A020F0}РРЅС„РѕСЂРјР°С†РёСЏ\n{FF0000}РЎР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°", "РћРљ", "РќР°Р·Р°Рґ", 2)
                     end
                 end)
             elseif lst == 3 then
-                lua_thread.create(function() wait(50); sampShowDialog(9914, "{0633E5}Отчет", "{FFFFFF}Введите ссылку на отчет:", "Отправить", "Отмена", 1) end)
+                lua_thread.create(function() wait(50); sampShowDialog(9914, "{0633E5}РћС‚С‡РµС‚", "{FFFFFF}Р’РІРµРґРёС‚Рµ СЃСЃС‹Р»РєСѓ РЅР° РѕС‚С‡РµС‚:", "РћС‚РїСЂР°РІРёС‚СЊ", "РћС‚РјРµРЅР°", 1) end)
             elseif lst == 4 then
-                lua_thread.create(function() wait(50); sampShowDialog(9915, "{0633E5}Комментарий", "{FFFFFF}Введите комментарий:", "Отправить", "Отмена", 1) end)
+                lua_thread.create(function() wait(50); sampShowDialog(9915, "{0633E5}РљРѕРјРјРµРЅС‚Р°СЂРёР№", "{FFFFFF}Р’РІРµРґРёС‚Рµ РєРѕРјРјРµРЅС‚Р°СЂРёР№:", "РћС‚РїСЂР°РІРёС‚СЊ", "РћС‚РјРµРЅР°", 1) end)
             else
                 local columns = {"lecture", "theory", "practice"}
                 local colName = columns[lst + 1]
                 if colName then
-                    sampAddChatMessage("{0633E5}[FM] {FFFFFF}Запрос на обновление...", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FFFFFF}Р—Р°РїСЂРѕСЃ РЅР° РѕР±РЅРѕРІР»РµРЅРёРµ...", -1)
                     if not cadetsDB then cadetsDB = {} end
                     if not cadetsDB[safeName] then cadetsDB[safeName] = {} end
                     cadetsDB[safeName][colName] = "1"
@@ -1024,7 +1040,7 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
                     lua_thread.create(function()
                         wait(100)
                         if selectedCadet and selectedCadet.displayName then
-                            sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Лекция\nТеория\nПрактика\nОтчет\nКомментарий\n{A020F0}Информация\n{FF0000}Сброс прогресса", "ОК", "Назад", 2)
+                            sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Р›РµРєС†РёСЏ\nРўРµРѕСЂРёСЏ\nРџСЂР°РєС‚РёРєР°\nРћС‚С‡РµС‚\nРљРѕРјРјРµРЅС‚Р°СЂРёР№\n{A020F0}РРЅС„РѕСЂРјР°С†РёСЏ\n{FF0000}РЎР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°", "РћРљ", "РќР°Р·Р°Рґ", 2)
                         end
                     end)
                 end
@@ -1037,7 +1053,7 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
         lua_thread.create(function() 
             wait(50)
             if selectedCadet and selectedCadet.displayName then
-                sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Лекция\nТеория\nПрактика\nОтчет\nКомментарий\n{A020F0}Информация\n{FF0000}Сброс прогресса", "ОК", "Назад", 2) 
+                sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Р›РµРєС†РёСЏ\nРўРµРѕСЂРёСЏ\nРџСЂР°РєС‚РёРєР°\nРћС‚С‡РµС‚\nРљРѕРјРјРµРЅС‚Р°СЂРёР№\n{A020F0}РРЅС„РѕСЂРјР°С†РёСЏ\n{FF0000}РЎР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°", "РћРљ", "РќР°Р·Р°Рґ", 2) 
             end
         end)
         return false
@@ -1072,7 +1088,7 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
             lua_thread.create(function() 
                 wait(50)
                 if selectedCadet and selectedCadet.displayName then
-                    sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Лекция\nТеория\nПрактика\nОтчет\nКомментарий\n{A020F0}Информация\n{FF0000}Сброс прогресса", "ОК", "Назад", 2) 
+                    sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Р›РµРєС†РёСЏ\nРўРµРѕСЂРёСЏ\nРџСЂР°РєС‚РёРєР°\nРћС‚С‡РµС‚\nРљРѕРјРјРµРЅС‚Р°СЂРёР№\n{A020F0}РРЅС„РѕСЂРјР°С†РёСЏ\n{FF0000}РЎР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°", "РћРљ", "РќР°Р·Р°Рґ", 2) 
                 end
             end)
         end
@@ -1089,7 +1105,7 @@ function sampev.onSendDialogResponse(id, btn, lst, inp)
             lua_thread.create(function() 
                 wait(50)
                 if selectedCadet and selectedCadet.displayName then
-                    sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Лекция\nТеория\nПрактика\nОтчет\nКомментарий\n{A020F0}Информация\n{FF0000}Сброс прогресса", "ОК", "Назад", 2) 
+                    sampShowDialog(9911, "{0633E5}" .. selectedCadet.displayName, "Р›РµРєС†РёСЏ\nРўРµРѕСЂРёСЏ\nРџСЂР°РєС‚РёРєР°\nРћС‚С‡РµС‚\nРљРѕРјРјРµРЅС‚Р°СЂРёР№\n{A020F0}РРЅС„РѕСЂРјР°С†РёСЏ\n{FF0000}РЎР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°", "РћРљ", "РќР°Р·Р°Рґ", 2) 
                 end
             end)
         end
@@ -1116,14 +1132,14 @@ function sampev.onServerMessage(clr, txt)
 
                 table.insert(factionOnline, {rawName = nick, id = id, rank = rank, joinDate = date_mem or ""})
                 
-                if cleanTxt:find("Кадет") or cleanTxt:find("Cadet") then
+                if cleanTxt:find("РљР°РґРµС‚") or cleanTxt:find("Cadet") then
                     table.insert(tempCadets, {rawName = nick, displayName = nick:gsub("_", " "), id = id, joinDate = date_mem or ""})
                 end
             end
             return false
         end
         
-        if cleanTxt:find("Всего%:") or cleanTxt:find("Всего в сети") or cleanTxt:find("Онлайн организации") then
+        if cleanTxt:find("Р’СЃРµРіРѕ%:") or cleanTxt:find("Р’СЃРµРіРѕ РІ СЃРµС‚Рё") or cleanTxt:find("РћРЅР»Р°Р№РЅ РѕСЂРіР°РЅРёР·Р°С†РёРё") then
             isUpdating = false
             cadetsOnline = tempCadets
             
@@ -1169,21 +1185,21 @@ function sampev.onServerMessage(clr, txt)
                         local updateOnlineUrl = GAS_URL .. "?action=update_online&list=" .. safeOnlineJson .. isFirst
                         
                         if i == 1 then
-                            sampAddChatMessage("{0633E5}[FM] {FFFFFF}Сотрудников найдено: {00FF00}" .. #onlineData .. "{FFFFFF}. Отправляем в таблицу...", -1)
+                            sampAddChatMessage("{0633E5}[FM] {FFFFFF}РЎРѕС‚СЂСѓРґРЅРёРєРѕРІ РЅР°Р№РґРµРЅРѕ: {00FF00}" .. #onlineData .. "{FFFFFF}. РћС‚РїСЂР°РІР»СЏРµРј РІ С‚Р°Р±Р»РёС†Сѓ...", -1)
                         end
                         
                         queueHttpRequest(updateOnlineUrl, function(res)
                             if res and res:find("Members synced") then
                                 if i + chunkSize > #onlineData then
-                                    sampAddChatMessage("{0633E5}[FM] {00FF00}Лист Members успешно обновлен!", -1)
+                                    sampAddChatMessage("{0633E5}[FM] {00FF00}Р›РёСЃС‚ Members СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅ!", -1)
                                 end
                             else
-                                sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка записи таблицы. Ответ сервера: " .. tostring(res), -1)
+                                sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР° Р·Р°РїРёСЃРё С‚Р°Р±Р»РёС†С‹. РћС‚РІРµС‚ СЃРµСЂРІРµСЂР°: " .. tostring(res), -1)
                             end
                         end)
                     end
                 else
-                    sampAddChatMessage("{0633E5}[FM] {FF0000}Ошибка: скрипт не нашел ни одного сотрудника в /members. Проверь парсер.", -1)
+                    sampAddChatMessage("{0633E5}[FM] {FF0000}РћС€РёР±РєР°: СЃРєСЂРёРїС‚ РЅРµ РЅР°С€РµР» РЅРё РѕРґРЅРѕРіРѕ СЃРѕС‚СЂСѓРґРЅРёРєР° РІ /members. РџСЂРѕРІРµСЂСЊ РїР°СЂСЃРµСЂ.", -1)
                 end
             end
             
